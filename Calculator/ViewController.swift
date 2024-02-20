@@ -7,8 +7,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+extension Double {
+    var removeZero: String {
+        return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
+}
 
+class ViewController: UIViewController {
+    
     let zeroSymbol = "0"
     let oneSymbol = "1"
     let twoSymbol = "2"
@@ -19,29 +25,33 @@ class ViewController: UIViewController {
     let sevenSymbol = "7"
     let eightSymbol = "8"
     let nineSymbol = "9"
-    let decimalSymbol = ","
-    
-    var cleanLabelOnNextSymbol = false
+    let decimalSymbol = "."
     
     var firstValue = 0.0
     var secondValue = 0.0
     
+    var result = 0.0
+    
     var firstValueSet = false
     var secondValueSet = false
     
-    var currentOperation = ""
+    var cleanLabelOnNextSymbol = false
     
-    var solvedOperation = false
+    var currentOperation = ""
     
     @IBOutlet weak var resultLabel: UILabel!
 
     func addSymbolToResultLabel(symbol: String) {
-        if resultLabel.text == "0" && symbol != "," {
+        if resultLabel.text == "0" && symbol != "." {
             resultLabel.text = ""
         }
         
         if cleanLabelOnNextSymbol {
-            if symbol == "," {
+            if currentOperation == "" {
+                reset()
+            }
+            
+            if symbol == "." {
                 resultLabel.text = "0" + symbol
             } else {
                 resultLabel.text = symbol
@@ -54,25 +64,35 @@ class ViewController: UIViewController {
     
     func setOperation(operation: String) {
         cleanLabelOnNextSymbol = true
-        setValue()
         currentOperation = operation
+    }
+    
+    func exchangeValues() {
+        firstValue = result
+        secondValue = 0.0
+        firstValueSet = true
+        secondValueSet = false
+        cleanLabelOnNextSymbol = false
+        currentOperation = ""
     }
     
     func equals() {
         if firstValueSet && secondValueSet {
             switch currentOperation {
             case "plus":
-                resultLabel.text = String(firstValue + (Double(resultLabel.text!) ?? 0))
+                result = firstValue + (Double(resultLabel.text!) ?? 0)
             case "minus":
-                resultLabel.text = String(firstValue - (Double(resultLabel.text!) ?? 0))
+                result = firstValue - (Double(resultLabel.text!) ?? 0)
             case "multiplication":
-                resultLabel.text = String(firstValue * (Double(resultLabel.text!) ?? 0))
+                result = firstValue * (Double(resultLabel.text!) ?? 0)
             case "division":
-                resultLabel.text = String(firstValue / (Double(resultLabel.text!) ?? 0))
+                result = firstValue / (Double(resultLabel.text!) ?? 0)
             default:
-                solvedOperation = true
+                print("default")
             }
+            exchangeValues()
             cleanLabelOnNextSymbol = true
+            resultLabel.text = String(result.removeZero)
         }
     }
 
@@ -86,9 +106,20 @@ class ViewController: UIViewController {
         }
     }
     
+    func reset() {
+        resultLabel.text = "0"
+        firstValue = 0.0
+        secondValue = 0.0
+        firstValueSet = false
+        secondValueSet = false
+        result = 0.0
+        cleanLabelOnNextSymbol = false
+        currentOperation = ""
+    }
+    
     // Number Buttons
     @IBAction func decimalButton(_ sender: UIButton) {
-        if !resultLabel.text!.contains(",") {
+        if !resultLabel.text!.contains(".") {
             resultLabel.text = resultLabel.text! + decimalSymbol
         }
     }
@@ -135,36 +166,45 @@ class ViewController: UIViewController {
     
     // Function Buttons
     @IBAction func acButton(_ sender: UIButton) {
-        resultLabel.text = "0"
-        firstValue = 0.0
-        secondValue = 0.0
-        firstValueSet = false
-        secondValueSet = false
+        reset()
     }
     
     @IBAction func plusminusButton(_ sender: UIButton) {
+//        firstValue = (Double(resultLabel.text!) ?? 0) * -1
+//        resultLabel.text = String(firstValue.removeZero)
     }
     
     @IBAction func percentageButton(_ sender: UIButton) {
+//        firstValue = (Double(resultLabel.text!) ?? 0) / 100
+//        resultLabel.text = String(firstValue.removeZero)
     }
     
     @IBAction func divisionButton(_ sender: UIButton) {
+        setValue()
+        equals()
         setOperation(operation: "division")
     }
     
     @IBAction func multiplicationButton(_ sender: UIButton) {
+        setValue()
+        equals()
         setOperation(operation: "multiplication")
     }
     
     @IBAction func minusButton(_ sender: UIButton) {
+        setValue()
+        equals()
         setOperation(operation: "minus")
     }
     
     @IBAction func plusButton(_ sender: UIButton) {
+        setValue()
+        equals()
         setOperation(operation: "plus")
     }
     
     @IBAction func equalsButton(_ sender: UIButton) {
+        setValue()
         equals()
     }
 }
