@@ -389,9 +389,7 @@
                                                     <constraint firstAttribute="bottom" secondItem="zBE-33-85a" secondAttribute="bottom" id="bAW-gb-ntH"/>
                                                     <constraint firstAttribute="bottom" secondItem="rPe-fP-rax" secondAttribute="bottom" id="i7L-6D-AGb"/>
                                                     <constraint firstItem="rPe-fP-rax" firstAttribute="top" secondItem="wCv-79-B1k" secondAttribute="top" id="ivt-u3-osu"/>
-                                                    <constraint firstItem="rPe-fP-rax" firstAttribute="leading" secondItem="zBE-33-85a" secondAttribute="trailing" id="lVh-Lj-Cdh"/>
                                                     <constraint firstItem="zBE-33-85a" firstAttribute="top" secondItem="wCv-79-B1k" secondAttribute="top" id="vGS-mi-RZu"/>
-                                                    <constraint firstItem="rPe-fP-rax" firstAttribute="leading" secondItem="zBE-33-85a" secondAttribute="trailing" id="vOP-nP-eeL"/>
                                                 </constraints>
                                             </stackView>
                                         </subviews>

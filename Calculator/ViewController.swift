@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     var currentOperation = ""
     
     @IBOutlet weak var resultLabel: UILabel!
-
+    
     func addSymbolToResultLabel(symbol: String) {
         if resultLabel.text == "0" && symbol != "." {
             resultLabel.text = ""
